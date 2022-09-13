@@ -1,32 +1,32 @@
+/* eslint-disable jsx-a11y/alt-text */
 import { useState, useEffect } from 'react';
-import { Link, Outlet } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { Container } from './styles_components/container';
+import { Movie } from './styles_components/movie';
+import { MovieList } from './styles_components/movie_list';
 
-import './App.css';
 
 function App() {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
     fetch(`https://api.themoviedb.org/3/movie/popular?api_key=fcd6ef2d7e0df8811075c26e661330cf&language=en-US&page=1`)
-    .then(response => response.json())
-    .then(data => setMovies(data.results))
+      .then(response => response.json())
+      .then(data => setMovies(data.results))
   }, [])
 
   return (
-    <div>
+    <Container>
       <h1>Best Movies to Watch</h1>
-      {movies.map(movie => (
-        <li key={movie.id}>
-          <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}/>
-          <h3>{movie.title}</h3>
-          {/* <nav>
-            <Link to='/detail'>Teste</Link>
-          </nav>
-          <Outlet /> */}
-        </li>
-
-      ))}
-    </div>
+      <MovieList>
+        {movies.map(movie => (
+          <Movie key={movie.id}>
+            <Link to={`/detail/${movie.id}`}><img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} /></Link>
+            <span>{movie.title}</span>
+          </Movie>
+        ))}
+      </MovieList>
+    </Container>
   );
 }
 
